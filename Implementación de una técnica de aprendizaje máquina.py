@@ -7,7 +7,9 @@ from sklearn.model_selection import train_test_split
 import random
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
-
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 #leer la data
 df=pd.read_csv("C:/Users/Admin/Downloads/titanic.csv")
 #mostrar la forma de los datos originales
@@ -89,7 +91,7 @@ k = 6
 #creamos un ciclo para realizar las pruebas correspondientes
 
 
-for i in range(6):
+for i in range(2):
     #imprimimos un texto para diferenciar cada prueba
     print("++++++++PRUEBA ", i+1,"+++++++++")
     #con ayuda de las funciones de sklearn hacemos la division de la data en 3 conjuntos, uno de entrenmiento con el 60% de los datos, 
@@ -132,3 +134,21 @@ for i in range(6):
     print("Metricas conjunto de validacion\n")
     print(report)
     print("\n")
+cm = confusion_matrix(y_test, l_predicciones)
+
+# Define etiquetas para las clases (en este caso, 0 y 1)
+class_labels = ["No sobrevive", "Sobrevive"]
+
+# Crea una figura para la matriz de confusión
+plt.figure(figsize=(8, 6))
+
+# Utiliza seaborn para mostrar la matriz de confusión como un mapa de calor
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_labels, yticklabels=class_labels)
+
+# Agrega etiquetas y título
+plt.xlabel('Predicciones')
+plt.ylabel('Valores reales')
+plt.title('Matriz de Confusión')
+
+# Muestra la matriz de confusión
+plt.show()
