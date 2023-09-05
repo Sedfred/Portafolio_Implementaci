@@ -87,11 +87,13 @@ def knn(data, point, k):
   return most_common_label
 
 k = 6
+#creamos una lista que guardara las matrices de confusion de cada iteracion
+list_cm=[]
 
 #creamos un ciclo para realizar las pruebas correspondientes
-
-
-for i in range(2):
+#le damos valor a n la cual sera el control para el numero de pruebas a realizar y subplots
+n=4
+for i in range(n):
     #imprimimos un texto para diferenciar cada prueba
     print("++++++++PRUEBA ", i+1,"+++++++++")
     #con ayuda de las funciones de sklearn hacemos la division de la data en 3 conjuntos, uno de entrenmiento con el 60% de los datos, 
@@ -134,21 +136,16 @@ for i in range(2):
     print("Metricas conjunto de validacion\n")
     print(report)
     print("\n")
-cm = confusion_matrix(y_test, l_predicciones)
+    #utilizamos la funcion confusion matrix para obtener los valores de la matriz de confusion y los almacenamos
+    list_cm.append(confusion_matrix(y_validation,l_predicciones2))
 
-# Define etiquetas para las clases (en este caso, 0 y 1)
-class_labels = ["No sobrevive", "Sobrevive"]
+# Creamos una figura con n subplots
+fig, axes = plt.subplots(nrows=1, ncols=n, figsize=(12, 6))
 
-# Crea una figura para la matriz de confusión
-plt.figure(figsize=(8, 6))
-
-# Utiliza seaborn para mostrar la matriz de confusión como un mapa de calor
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=class_labels, yticklabels=class_labels)
-
-# Agrega etiquetas y título
-plt.xlabel('Predicciones')
-plt.ylabel('Valores reales')
-plt.title('Matriz de Confusión')
-
-# Muestra la matriz de confusión
+# Mostramos las matrices de confusión en subplots con ayuda de la lista generada anteriormente
+for i in range(n):
+    sns.heatmap(list_cm[i], annot=True, cmap="Blues", fmt="d", ax=axes[i],xticklabels=["No sobrevive", "Sobrevive"], yticklabels=["No sobrevive", "Sobrevive"])
+    axes[i].set_title('Matriz de Confusión ' + str(i + 1))
+#se agrega espacio entre los subplots y se despliega la grafica
+plt.tight_layout()
 plt.show()
