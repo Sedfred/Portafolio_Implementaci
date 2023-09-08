@@ -121,7 +121,7 @@ for i in range(n):
     # con ayuda de la funcion accuracy_score obtenemos esta metrica de nuestro conjunto de prueba
     print("accuracy conjunto test:",accuracy_score(y_test,l_predicciones))
     #hacemos lo mismo con classification_report que nos devolvera el resto de las metricas
-    report = classification_report(y_validation,l_predicciones)
+    report = classification_report(y_test,l_predicciones)
     print("Metricas conjunto de prueba\n")
     print(report) 
         
