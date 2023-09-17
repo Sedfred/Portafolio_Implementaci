@@ -39,7 +39,8 @@ df=df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare',
        'Embarked','Survived']]
 
 
-
+#Se decidio implementar knn pues es un algoritmo facil de aplicar y ademas 
+#al tener solo dos clusters sera mas facil para el algoritmo determinar a que clase pertenece uno u otro 
 #creamos la funcion que calculcara la distancia euclidiana entre dos puntos
 def distancia_euc(p1, p2):
   sum_disc = 0.0
