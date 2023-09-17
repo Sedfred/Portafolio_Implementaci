@@ -40,9 +40,14 @@ df=df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare',
 
 
 #Se decidio implementar knn pues es un algoritmo facil de aplicar y ademas 
-#al tener solo dos clusters sera mas facil para el algoritmo determinar a que clase pertenece uno u otro 
+#al tener solo dos clusters sera mas facil para el algoritmo determinar a que clase perteneceran las nuevas predicciones
+
 #creamos la funcion que calculcara la distancia euclidiana entre dos puntos
 def distancia_euc(p1, p2):
+  """Calcula la distancia euclidiana entre dos puntos en un espacio n-dimensional
+    p1: Coordenadas del primer punto
+    p2: Coordenadas del segundo punto
+   Devuelve la distancia euclidiana entre los puntos"""
   sum_disc = 0.0
   #en este ciclo for utilizamos zip para poder trabajar con las coordendas de los dos ditintos puntos al mismo tiempo
   for cord1, cord2 in zip(p1, p2):
@@ -56,6 +61,11 @@ def distancia_euc(p1, p2):
 
 #ahora definimos la funcion que realiza el algoritmo knn
 def knn(data, point, k):
+  """Implementa el algoritmo k-Nearest Neighbors (k-NN) para predecir la clase de un punto
+    data: Conjunto de datos de entrenamiento
+    point: Punto a predecir
+    k: Número de vecinos a considerar
+   Devuelve la clase predicha para el punto"""
   dist = []
   #ireamos sobre la data e ignoramos el primer valor que nos devuelve iterrows()
   for _, i in data.iterrows():
@@ -123,18 +133,25 @@ for i in range(n):
     print("accuracy conjunto test:",accuracy_score(y_test,l_predicciones))
     #hacemos lo mismo con classification_report que nos devolvera el resto de las metricas
     report = classification_report(y_test,l_predicciones)
+    #imprimimos el reporte de las metricas
     print("Metricas conjunto de prueba\n")
     print(report) 
         
 
     l_predicciones2=[]
     #hacemos el mismo proceso pero para nuestro conjunto de validacion
+    #iteramos sobre el numero de filas de nuestra data de validacion
     for i in range(X_validation.shape[0]):
+        #con el algorimo que creamos anteriormente realizamos la prediccion para cada registro
         prediction = knn(train_df, X_validation.iloc[i].tolist(), k)
+        #añadimos estra prediccion a nuestra lista de predicciones
         l_predicciones2.append(prediction)
+    # con ayuda de la funcion accuracy_score obtenemos esta metrica de nuestro conjunto de validacion
     print("accuracy conjunto de validacion:",accuracy_score(y_validation,l_predicciones2))
     report = classification_report(y_validation,l_predicciones2)
+    #hacemos lo mismo con classification_report que nos devolvera el resto de las metricas
     print("Metricas conjunto de validacion\n")
+    #imprimimos el reporte de las metricas
     print(report)
     print("\n")
     #utilizamos la funcion confusion matrix para obtener los valores de la matriz de confusion y los almacenamos
@@ -144,9 +161,18 @@ for i in range(n):
 fig, axes = plt.subplots(nrows=1, ncols=n, figsize=(12, 6))
 
 # Mostramos las matrices de confusión en subplots con ayuda de la lista generada anteriormente
+
 for i in range(n):
+    """Generamos y mostrams un conjunto de gráficos de matrices de confusión
+    Itera a través de un rango de valores desde 0 hasta n o numero de purebas
+    Para cada iteración, genera una matriz de confusión y la visualiza como un mapa de calor
+    Anota los valores dentro del mapa de calor
+    Utiliza la paleta de colores "Blues" para representar la matriz
+    Establece etiquetas en los ejes X e Y para indicar las clases "No sobrevive" y "Sobrevive"
+    Asigna títulos a cada gráfico que indican el número de la matriz de confusión"""
     sns.heatmap(list_cm[i], annot=True, cmap="Blues", fmt="d", ax=axes[i],xticklabels=["No sobrevive", "Sobrevive"], yticklabels=["No sobrevive", "Sobrevive"])
     axes[i].set_title('Matriz de Confusión ' + str(i + 1))
 #se agrega espacio entre los subplots y se despliega la grafica
 plt.tight_layout()
+#se muestra el grafico
 plt.show()
